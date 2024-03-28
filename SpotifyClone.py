@@ -6,8 +6,8 @@ class HomeView(tk.Frame):
         self.pack()
     
     def draw_navbar(self):
-        self.navbar = tk.Frame(self.master)
-        self.navbar.pack(side = tk.LEFT)
+        self.navbar = tk.Frame(self.master, highlightbackground="blue", highlightthickness=1)
+        self.navbar.pack(side = tk.LEFT, padx = 5, fill = tk.Y)
 
         self.navigation = tk.Frame(self.navbar)
         self.navigation.pack(side = tk.TOP)
@@ -22,9 +22,17 @@ class HomeView(tk.Frame):
         self.playlists_frame.pack(side = tk.TOP)
 
     def draw_middle(self):
-        self.middle = tk.Frame(self.master)
-        self.middle.pack(side = tk.LEFT)
+        self.middle = tk.Frame(self.master, highlightbackground="blue", highlightthickness=1)
+        self.middle.pack(side = tk.LEFT, padx = 5, fill = tk.BOTH)
 
+        self.header = tk.Frame(self.middle)
+        self.header.pack(side = tk.TOP)
+
+        self.back_btn = tk.Button(self.header, text = "<", command = lambda: self.master.switch_page(None))
+        self.back_btn.pack(side = tk.LEFT)
+
+        self.forward_btn = tk.Button(self.header, text = ">", command = lambda: self.master.switch_page(None))
+        self.forward_btn.pack(side = tk.LEFT)
     def draw_right(self):
         self.right = tk.Frame(self.master)
         self.right.pack(side = tk.LEFT)
