@@ -1,4 +1,5 @@
 import tkinter as tk
+import sqlite3
 class User():
     def __init__(self) -> None:
         self.name = ""
@@ -65,8 +66,9 @@ class HomeView(tk.Frame):
         self.draw_right()
         self.draw_bottom()
 class Model():
-    def __init__(self, user):
+    def __init__(self, user, cursor):
         self.user = user
+        self.cursor = cursor
 
 class View():
     def __init__(self, master, user):
@@ -84,7 +86,8 @@ class View():
 class Controller():
     def __init__(self):
         self.user = User()
-        self.model = Model(self.user)
+        conn = sqlite3.connect("SpotifyClone.db")
+        self.model = Model(self.user, conn.cursor())
         self.root = tk.Tk()
         self.view = View(self.root, self.user)
         self.run()
