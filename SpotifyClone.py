@@ -1,37 +1,55 @@
 import tkinter as tk
+class User():
+    def __init__(self) -> None:
+        self.name = ""
+        self.email = ""
+        self.history = []
+        self.future = []
+
 class HomeView(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master, user):
         super().__init__(master)
         self.master = master
+        self.user = user
         self.pack()
     
     def draw_navbar(self):
-        self.navbar = tk.Frame(self.master, highlightbackground="blue", highlightthickness=1)
-        self.navbar.pack(side = tk.LEFT, padx = 5, fill = tk.Y)
+        self.navbar = tk.Frame(self.master, bg = "black")
+        self.navbar.pack(side = tk.LEFT, ipadx = 5, ipady= 5, fill = tk.Y)
 
-        self.navigation = tk.Frame(self.navbar)
+        self.navigation = tk.Frame(self.navbar, bg = "#202020")
         self.navigation.pack(side = tk.TOP)
 
-        self.home_button = tk.Button(self.navigation, text = "Home", command = lambda: self.master.switch_page(HomeView))
-        self.home_button.pack(side = tk.TOP)
+        self.home_button = tk.Button(self.navigation, text = "Home", bg = "#202020", borderwidth=0, command = lambda: self.master.switch_page(HomeView))
+        self.home_button.pack(side = tk.TOP, padx= 5, pady= 5)
 
-        self.search_button = tk.Button(self.navigation, text = "Search", command = lambda: self.master.switch_page(None))
-        self.search_button.pack(side = tk.TOP)
+        self.search_button = tk.Button(self.navigation, text = "Search" , bg = "#202020", borderwidth=0, command = lambda: self.master.switch_page(None))
+        self.search_button.pack(side = tk.TOP, padx= 5, pady= 5)
 
         self.playlists_frame = tk.Frame(self.navbar)
         self.playlists_frame.pack(side = tk.TOP)
 
     def draw_middle(self):
-        self.middle = tk.Frame(self.master, highlightbackground="blue", highlightthickness=1)
-        self.middle.pack(side = tk.LEFT, padx = 5, fill = tk.BOTH)
+        self.middle = tk.Frame(self.master)
+        self.middle.pack(side = tk.LEFT, ipadx = 5, ipady=5, fill = tk.BOTH)
 
         self.header = tk.Frame(self.middle)
         self.header.pack(side = tk.TOP)
 
-        self.back_btn = tk.Button(self.header, text = "<", command = lambda: self.master.switch_page(None))
+        if not len(self.user.history):
+            backfg = "grey"
+        else:
+            backfg = "white"
+
+        if not len(self.user.future):
+            fowardfg = "grey"
+        else:
+            fowardfg = "white"
+
+        self.back_btn = tk.Button(self.header, text = "<", fg = backfg, command = lambda: self.master.switch_page(None))
         self.back_btn.pack(side = tk.LEFT)
 
-        self.forward_btn = tk.Button(self.header, text = ">", command = lambda: self.master.switch_page(None))
+        self.forward_btn = tk.Button(self.header, text = ">", fg = fowardfg, command = lambda: self.master.switch_page(None))
         self.forward_btn.pack(side = tk.LEFT)
     def draw_right(self):
         self.right = tk.Frame(self.master)
@@ -47,26 +65,28 @@ class HomeView(tk.Frame):
         self.draw_right()
         self.draw_bottom()
 class Model():
-    def __init__(self):
-        pass
+    def __init__(self, user):
+        self.user = user
 
 class View():
-    def __init__(self, master):
+    def __init__(self, master, user):
         self.master = master
         self.current_page = None
+        self.user = user
 
     def open(self, page_class):
         if self.current_page:
             self.current_page.destroy()
         # Create new page
-        self.current_page = page_class(self.master)
+        self.current_page = page_class(self.master, self.user)
         self.current_page.draw()
 
 class Controller():
     def __init__(self):
-        self.model = Model()
+        self.user = User()
+        self.model = Model(self.user)
         self.root = tk.Tk()
-        self.view = View(self.root)
+        self.view = View(self.root, self.user)
         self.run()
         
     def run(self):
