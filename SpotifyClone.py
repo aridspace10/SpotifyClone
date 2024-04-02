@@ -15,11 +15,12 @@ class HomeView(tk.Frame):
         self.pack()
     
     def draw_navbar(self):
+
         self.navbar = tk.Frame(self.master, bg = "black")
-        self.navbar.pack(side = tk.LEFT, ipadx = 5, ipady= 5, fill = tk.Y)
+        self.navbar.pack(side = tk.LEFT, padx= 5, pady= 5, fill = tk.Y)
 
         self.navigation = tk.Frame(self.navbar, bg = "#202020")
-        self.navigation.pack(side = tk.TOP)
+        self.navigation.pack(side = tk.TOP, padx = 5, pady= 5)
 
         self.home_button = tk.Button(self.navigation, text = "Home", bg = "#202020", borderwidth=0, command = lambda: self.master.switch_page(HomeView))
         self.home_button.pack(side = tk.TOP, padx= 5, pady= 5)
@@ -27,8 +28,16 @@ class HomeView(tk.Frame):
         self.search_button = tk.Button(self.navigation, text = "Search" , bg = "#202020", borderwidth=0, command = lambda: self.master.switch_page(None))
         self.search_button.pack(side = tk.TOP, padx= 5, pady= 5)
 
-        self.playlists_frame = tk.Frame(self.navbar)
+        self.playlists_frame = tk.Frame(self.navbar, bg = "#202020")
         self.playlists_frame.pack(side = tk.TOP)
+
+        self.title = tk.Label(self.playlists_frame, text = "Your Library", bg = "#202020")
+        self.title.pack(side = tk.LEFT, padx = 5, pady = 5)
+
+        self.add_playlist = tk.Button(self.playlists_frame, text = "+", command = None)
+        self.add_playlist.pack(side = tk.LEFT, padx = 5, pady = 5)
+
+
 
     def draw_middle(self):
         self.middle = tk.Frame(self.master)
