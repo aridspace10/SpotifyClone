@@ -55,6 +55,9 @@ class HomeView(tk.Frame):
             title = tk.Label(frame, text = str(playlist[1]), fg = "white", bg = "#202020")
             title.pack(side = tk.TOP, padx = 5, pady = 5)
 
+            frame.bind("<Enter>", lambda event, f=frame: self.hover_on(f))
+            frame.bind("<Leave>", lambda event, f=frame: self.hover_off(f))
+
     def draw_middle(self):
         self.middle = tk.Frame(self.master)
         self.middle.pack(side = tk.LEFT, ipadx = 5, ipady=5, fill = tk.BOTH)
@@ -90,6 +93,11 @@ class HomeView(tk.Frame):
         self.draw_middle()
         self.draw_right()
         self.draw_bottom()
+    
+    def hover_on(self, frame: tk.Frame) -> None:
+        frame.config(bg = "lightgray")
+    def hover_off(self, frame: tk.Frame) -> None:
+        frame.config(bg = "#202020")
 
 class View():
     def __init__(self, master, user, model):
