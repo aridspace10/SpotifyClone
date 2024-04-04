@@ -2,20 +2,30 @@ import tkinter as tk
 import sqlite3
 class User():
     def __init__(self) -> None:
+        self.id = 1
         self.name = ""
         self.email = ""
         self.history = []
         self.future = []
 
+class Model():
+    def __init__(self, user, cursor):
+        self.user = user
+        self.cursor = cursor
+
+    def get_playlists(self, id: int) -> list:
+        self.cursor.execute("SELECT * FROM playlist WHERE userid = ?", (id,))
+        return self.cursor.fetchall()
+
 class HomeView(tk.Frame):
-    def __init__(self, master, user):
+    def __init__(self, master, user, model):
         super().__init__(master)
         self.master = master
         self.user = user
+        self.model = model
         self.pack()
     
     def draw_navbar(self):
-
         self.navbar = tk.Frame(self.master, bg = "black")
         self.navbar.pack(side = tk.LEFT, padx= 5, pady= 5, fill = tk.Y)
 
@@ -32,12 +42,18 @@ class HomeView(tk.Frame):
         self.playlists_frame.pack(side = tk.TOP)
 
         self.title = tk.Label(self.playlists_frame, text = "Your Library", bg = "#202020")
-        self.title.pack(side = tk.LEFT, padx = 5, pady = 5)
+        self.title.pack(side = tk.TOP, padx = 5, pady = 5)
 
         self.add_playlist = tk.Button(self.playlists_frame, text = "+", command = None)
-        self.add_playlist.pack(side = tk.LEFT, padx = 5, pady = 5)
+        self.add_playlist.pack(side = tk.TOP, padx = 5, pady = 5)
 
+        playlists = self.model.get_playlists(self.user.id)
+        for playlist in playlists:
+            frame = tk.Frame(self.playlists_frame, bg = "#202020")
+            frame.pack(side = tk.TOP)
 
+            title = tk.Label(frame, text = str(playlist[1]), fg = "white", bg = "#202020")
+            title.pack(side = tk.TOP, padx = 5, pady = 5)
 
     def draw_middle(self):
         self.middle = tk.Frame(self.master)
@@ -74,22 +90,19 @@ class HomeView(tk.Frame):
         self.draw_middle()
         self.draw_right()
         self.draw_bottom()
-class Model():
-    def __init__(self, user, cursor):
-        self.user = user
-        self.cursor = cursor
 
 class View():
-    def __init__(self, master, user):
+    def __init__(self, master, user, model):
         self.master = master
         self.current_page = None
         self.user = user
+        self.model = model
 
     def open(self, page_class):
         if self.current_page:
             self.current_page.destroy()
         # Create new page
-        self.current_page = page_class(self.master, self.user)
+        self.current_page = page_class(self.master, self.user, self.model)
         self.current_page.draw()
 
 class Controller():
@@ -98,7 +111,7 @@ class Controller():
         conn = sqlite3.connect("SpotifyClone.db")
         self.model = Model(self.user, conn.cursor())
         self.root = tk.Tk()
-        self.view = View(self.root, self.user)
+        self.view = View(self.root, self.user, self.model)
         self.run()
         
     def run(self):
