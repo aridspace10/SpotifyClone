@@ -17,6 +17,10 @@ class Model():
         self.cursor.execute("SELECT * FROM playlist WHERE userid = ?", (id,))
         return self.cursor.fetchall()
 
+    def get_songs_in_playlist(self, id: int) -> list:
+        self.cursor.execute("SELECT * FROM songs_playlist WHERE playlistid = ?", (id,))
+        return self.cursor.fetchall()
+
 class HomeView(tk.Frame):
     def __init__(self, master, user, model):
         super().__init__(master)
