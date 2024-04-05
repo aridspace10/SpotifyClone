@@ -1,5 +1,5 @@
 import sqlite3
-conn = sqlite3.connect('Spotify.db')
+conn = sqlite3.connect('SpotifyClone.db')
 cursor = conn.cursor()
 cursor.execute('''CREATE TABLE artist (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -43,6 +43,19 @@ cursor.execute('''CREATE TABLE songs (
     FOREIGN KEY (albumid) REFERENCES album(id))
     ''')
 
+cursor.execute(''' INSERT INTO songs (name, albumid, DOR, genre, length, artistid) VALUES 
+        ('Bohemian Rhapsody', 1, '1975-10-31', 'Rock', 355, 1),
+        ('Thriller', 2, '1982-11-30', 'Pop', 357, 2),
+        ('Hotel California', 3, '1976-12-08', 'Rock', 391, 3),
+        ('Like a Rolling Stone', 4, '1965-07-20', 'Rock', 371, 4),
+        ('Smells Like Teen Spirit', 5, '1991-09-10', 'Grunge', 298, 5),
+        ('Stairway to Heaven', 6, '1971-11-08', 'Rock', 482, 6),
+        ('Imagine', 7, '1971-09-09', 'Pop', 187, 7),
+        ('Hey Jude', 8, '1968-08-26', 'Rock', 431, 8),
+        ('Billie Jean', 9, '1982-01-02', 'Pop', 294, 9),
+        ('Hurt', 10, '2002-04-17', 'Alternative', 258, 10)
+''')
+
 cursor.execute('''CREATE TABLE album (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     name text NOT NULL, 
     DOC date NOT NULL,
@@ -59,9 +72,16 @@ cursor.execute('''CREATE TABLE songs_albums(
 cursor.execute('''CREATE TABLE songs_playlist(
     playlistid int NOT NULL,
     songid int NOT NULL,
+    DateAdded text NOT NULL,
     FOREIGN KEY (playlistid) REFERENCES playlist(id),
     FOREIGN KEY (songid) REFERENCES songs(id)
     )''') 
+
+cursor.execute('''INSERT INTO songs_playlist (playlistid, songid, DateAdded) VALUES 
+               (1,1, 2024-01-05 22:02:47),
+               (1,2, 2024-03-27 16:45:13),
+               (2,3, 2024-04-05 08:07:23)
+''')
 
 conn.commit()
 
