@@ -20,6 +20,14 @@ class Model():
     def get_songs_in_playlist(self, id: int) -> list:
         self.cursor.execute("SELECT * FROM songs_playlist WHERE playlistid = ?", (id,))
         return self.cursor.fetchall()
+    
+    def get_artist(self, id: int) -> list:
+        self.cursor.execute("SELECT * FROM artist WHERE id = ?", (id,))
+        return self.cursor.fetchall()[0]
+    
+    def get_song(self, id: int) -> list:
+        self.cursor.execute("SELECT * FROM songs where id = ?", (id,))
+        return self.cursor.fetchall()[0]
 
 class HomeView(tk.Frame):
     def __init__(self, master, user, model):
@@ -84,6 +92,23 @@ class HomeView(tk.Frame):
 
         self.forward_btn = tk.Button(self.header, text = ">", fg = fowardfg, command = lambda: self.master.switch_page(None))
         self.forward_btn.pack(side = tk.LEFT)
+
+        self.songs_frame = tk.Frame(self.middle)
+        self.songs_frame.pack(side = tk.TOP)
+
+        songs = self.model.get_songs_in_playlist(1)
+        for song in enumerate(songs):
+            frame = tk.Frame(self.songs_frame)
+            frame.pack(side = tk.TOP, fill= tk.X)
+            
+            tk.Label(frame, text = str(song[0] + 1)).pack(side = tk.LEFT)
+            names = tk.Frame(frame)
+            names.pack(side = tk.LEFT)
+
+            song_data = self.model.get_song(song[1][1])
+            tk.Label(names, text = song_data[1]).pack(side= tk.TOP)
+            tk.Label(names, text = self.model.get_artist(song_data[6])[1]).pack(side = tk.TOP)
+
     def draw_right(self):
         self.right = tk.Frame(self.master)
         self.right.pack(side = tk.LEFT)
