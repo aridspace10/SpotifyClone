@@ -5,8 +5,21 @@ cursor.execute('''CREATE TABLE artist (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     fname text NOT NULL, 
     lname text, 
-    DOB date NOT NULL
+    DOB date
     )''')   
+
+cursor.execute(""" INSERT INTO artist (fname, lname, DOB) VALUES 
+    ('Freddie', 'Mercury', '1946-09-05'),
+    ('Michael', 'Jackson', '1958-08-29'),
+    ('Eagles', NULL, NULL),
+    ('Bob', 'Dylan', '1941-05-24'),
+    ('Nirvana', NULL, NULL),
+    ('Led', 'Zeppelin', NULL),
+    ('John', 'Lennon', '1940-10-09'),
+    ('The Beatles', NULL, NULL),
+    ('Michael', 'Jackson', '1958-08-29'),
+    ('Johnny', 'Cash', '1932-02-26'); 
+""")
 
 cursor.execute('''CREATE TABLE user (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -78,9 +91,9 @@ cursor.execute('''CREATE TABLE songs_playlist(
     )''') 
 
 cursor.execute('''INSERT INTO songs_playlist (playlistid, songid, DateAdded) VALUES 
-               (1,1, 2024-01-05 22:02:47),
-               (1,2, 2024-03-27 16:45:13),
-               (2,3, 2024-04-05 08:07:23)
+               (1,1, '2024-01-05 22:02:47'),
+               (1,2, '2024-03-27 16:45:13'),
+               (2,3, '2024-04-05 08:07:23')
 ''')
 
 conn.commit()
