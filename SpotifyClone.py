@@ -28,6 +28,10 @@ class Model():
     def get_song(self, id: int) -> list:
         self.cursor.execute("SELECT * FROM songs where id = ?", (id,))
         return self.cursor.fetchall()[0]
+    
+    def get_album(self, id: int) -> list:
+        self.cursor.execute("SELECT * FROM album WHERE id = ?", (id,))
+        return self.cursor.fetchall()[0]
 
 class HomeView(tk.Frame):
     def __init__(self, master, user, model):
@@ -108,6 +112,8 @@ class HomeView(tk.Frame):
             song_data = self.model.get_song(song[1][1])
             tk.Label(names, fg = "white", text = song_data[1], bg = "#202020").pack(anchor = tk.NW)
             tk.Label(names, fg = "gray", text = self.model.get_artist(song_data[6])[1], bg = "#202020", font=("Helvetica", 8)).pack(anchor = tk.NW)
+
+            tk.Label(frame, text = self.model.get_album(song_data[2])[1], bg = "#202020", fg = "gray").pack(anchor = tk.CENTER, ipadx= 5, ipady = 5)
 
     def draw_right(self):
         self.right = tk.Frame(self.master)
