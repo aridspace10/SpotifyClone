@@ -71,7 +71,7 @@ class HomeView(tk.Frame):
             frame.bind("<Leave>", lambda event, f=frame: self.hover_off(f))
 
     def draw_middle(self):
-        self.middle = tk.Frame(self.master)
+        self.middle = tk.Frame(self.master, bg = "#202020")
         self.middle.pack(side = tk.LEFT, ipadx = 5, ipady=5, fill = tk.BOTH)
 
         self.header = tk.Frame(self.middle)
@@ -93,21 +93,21 @@ class HomeView(tk.Frame):
         self.forward_btn = tk.Button(self.header, text = ">", fg = fowardfg, command = lambda: self.master.switch_page(None))
         self.forward_btn.pack(side = tk.LEFT)
 
-        self.songs_frame = tk.Frame(self.middle)
+        self.songs_frame = tk.Frame(self.middle, bg = "#202020")
         self.songs_frame.pack(side = tk.TOP)
 
         songs = self.model.get_songs_in_playlist(1)
         for song in enumerate(songs):
-            frame = tk.Frame(self.songs_frame)
+            frame = tk.Frame(self.songs_frame, bg = "#202020")
             frame.pack(side = tk.TOP, fill= tk.X)
             
-            tk.Label(frame, text = str(song[0] + 1)).pack(side = tk.LEFT)
-            names = tk.Frame(frame)
+            tk.Label(frame, text = str(song[0] + 1), bg = "#202020").pack(side = tk.LEFT)
+            names = tk.Frame(frame, bg = "#202020")
             names.pack(side = tk.LEFT)
 
             song_data = self.model.get_song(song[1][1])
-            tk.Label(names, text = song_data[1]).pack(side= tk.TOP)
-            tk.Label(names, text = self.model.get_artist(song_data[6])[1]).pack(side = tk.TOP)
+            tk.Label(names, fg = "white", text = song_data[1], bg = "#202020").pack(anchor = tk.NW)
+            tk.Label(names, fg = "gray", text = self.model.get_artist(song_data[6])[1], bg = "#202020", font=("Helvetica", 8)).pack(anchor = tk.NW)
 
     def draw_right(self):
         self.right = tk.Frame(self.master)
