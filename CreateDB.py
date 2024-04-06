@@ -76,6 +76,18 @@ cursor.execute('''CREATE TABLE album (id INTEGER PRIMARY KEY AUTOINCREMENT NOT N
     FOREIGN KEY (artistid) REFERENCES artist(id))
     ''')  
 
+cursor.execute('''INSERT INTO album (name, DOC, artistid) VALUES 
+    ('A Night at the Opera', '1975-11-21', 1),
+    ('Thriller', '1982-11-30', 2),
+    ('Hotel California', '1976-12-08', 3),
+    ('Highway 61 Revisited', '1965-08-30', 4),
+    ('Nevermind', '1991-09-24', 5),
+    ('Led Zeppelin IV', '1971-11-08', 6),
+    ('Imagine', '1971-09-09', 7),
+    ('The Beatles (White Album)', '1968-11-22', 8),
+    ('Thriller', '1982-11-30', 9),
+    ('American IV: The Man Comes Around', '2002-11-05', 10);''')
+
 cursor.execute('''CREATE TABLE songs_albums(
     albumid int NOT NULL,
     songid int NOT NULL,
@@ -91,9 +103,9 @@ cursor.execute('''CREATE TABLE songs_playlist(
     )''') 
 
 cursor.execute('''INSERT INTO songs_playlist (playlistid, songid, DateAdded) VALUES 
-               (1,1, '2024-01-05 22:02:47'),
-               (1,2, '2024-03-27 16:45:13'),
-               (2,3, '2024-04-05 08:07:23')
+    (1,1, '2024-01-05 22:02:47'),
+    (1,2, '2024-03-27 16:45:13'),
+    (2,3, '2024-04-05 08:07:23')
 ''')
 
 conn.commit()
