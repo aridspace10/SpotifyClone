@@ -1,5 +1,6 @@
 import tkinter as tk
 import sqlite3
+import datetime
 class User():
     def __init__(self) -> None:
         self.id = 1
@@ -32,6 +33,12 @@ class Model():
     def get_album(self, id: int) -> list:
         self.cursor.execute("SELECT * FROM album WHERE id = ?", (id,))
         return self.cursor.fetchall()[0]
+    
+    def convert_str_datetime(self, date: str) -> datetime.datetime:
+        return datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")
+    
+    def time_difference(self, date: datetime.datetime) -> str:
+        return str(datetime.datetime.now() - date)
 
 class HomeView(tk.Frame):
     def __init__(self, master, user, model):
