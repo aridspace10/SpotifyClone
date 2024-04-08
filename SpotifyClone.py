@@ -35,10 +35,38 @@ class Model():
         return self.cursor.fetchall()[0]
     
     def convert_str_datetime(self, date: str) -> datetime.datetime:
-        return datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")
+        return datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
     
     def time_difference(self, date: datetime.datetime) -> str:
-        return str(datetime.datetime.now() - date)
+        diff = datetime.datetime.now() - date
+        if (diff.days):
+            # Added less then 7 days
+            if (diff.days < 7):
+                if (diff.days == 1):
+                    return str(diff.days) + " day ago"
+                else:
+                    return str(diff.days) + " days ago"
+            else:
+                if (diff.days < 28):
+                    weeks = int(diff.days / 4)
+                    if (weeks == 1):
+                        return str(weeks) + " week ago"
+                    return str(weeks) + " weeks ago"
+                else:
+                    return date.strftime("%b %d, %Y")
+        else:
+            # Added less then 60 seconds ago
+            if (diff.total_seconds() < 60):
+                return str(int(diff.total_seconds())) + " seconds ago"
+            else:
+                # Added less then 60 minutes ago
+                if (diff.total_seconds() / 60 < 60):
+                    return str(int(diff.total_seconds() / 60)) + " minute ago"
+                else:
+                    hours = int(diff.total_seconds() / 3600)
+                    if (hours == 1):
+                        return str(hours) + " hour ago"
+                    return str(hours) + " hours ago"
 
 class HomeView(tk.Frame):
     def __init__(self, master, user, model):
@@ -120,7 +148,9 @@ class HomeView(tk.Frame):
             tk.Label(names, fg = "white", text = song_data[1], bg = "#202020").pack(anchor = tk.NW)
             tk.Label(names, fg = "gray", text = self.model.get_artist(song_data[6])[1], bg = "#202020", font=("Helvetica", 8)).pack(anchor = tk.NW)
 
-            tk.Label(frame, text = self.model.get_album(song_data[2])[1], bg = "#202020", fg = "gray").pack(anchor = tk.CENTER, ipadx= 5, ipady = 5)
+            tk.Label(frame, text = self.model.get_album(song_data[2])[1], bg = "#202020", fg = "gray").pack(side = tk.LEFT, ipadx= 5, ipady = 5)
+
+            tk.Label(frame, text = self.model.time_difference(self.model.convert_str_datetime(song[1][2])), bg = "#202020", fg = "gray").pack(side = tk.LEFT, ipadx= 5, ipady = 5)
 
     def draw_right(self):
         self.right = tk.Frame(self.master)
