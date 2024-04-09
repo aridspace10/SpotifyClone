@@ -152,6 +152,8 @@ class HomeView(tk.Frame):
 
             tk.Label(frame, text = self.model.time_difference(self.model.convert_str_datetime(song[1][2])), bg = "#202020", fg = "gray").pack(side = tk.LEFT, ipadx= 5, ipady = 5)
 
+            tk.Label(frame, text = song_data[5], bg = "#202020", fg = "gray").pack(side = tk.LEFT, ipadx= 5, ipady = 5)
+
     def draw_right(self):
         self.right = tk.Frame(self.master)
         self.right.pack(side = tk.LEFT)
