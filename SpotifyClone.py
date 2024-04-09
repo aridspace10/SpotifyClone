@@ -111,7 +111,7 @@ class HomeView(tk.Frame):
 
     def draw_middle(self):
         self.middle = tk.Frame(self.master, bg = "#202020")
-        self.middle.pack(side = tk.LEFT, ipadx = 5, ipady=5, fill = tk.BOTH)
+        self.middle.pack(side = tk.LEFT, ipadx = 5, ipady=5, fill = tk.BOTH, expand = tk.TRUE)
 
         self.header = tk.Frame(self.middle)
         self.header.pack(side = tk.TOP)
@@ -138,7 +138,7 @@ class HomeView(tk.Frame):
         songs = self.model.get_songs_in_playlist(1)
         for song in enumerate(songs):
             frame = tk.Frame(self.songs_frame, bg = "#202020")
-            frame.pack(side = tk.TOP, fill= tk.X)
+            frame.pack(side = tk.TOP, fill= tk.X, expand = tk.TRUE)
             
             tk.Label(frame, text = str(song[0] + 1), bg = "#202020").pack(side = tk.LEFT)
             names = tk.Frame(frame, bg = "#202020")
@@ -153,6 +153,8 @@ class HomeView(tk.Frame):
             tk.Label(frame, text = self.model.time_difference(self.model.convert_str_datetime(song[1][2])), bg = "#202020", fg = "gray").pack(side = tk.LEFT, ipadx= 5, ipady = 5)
 
             tk.Label(frame, text = song_data[5], bg = "#202020", fg = "gray").pack(side = tk.LEFT, ipadx= 5, ipady = 5)
+            frame.bind("<Enter>", lambda event, f=frame: self.hover_on(f))
+            frame.bind("<Leave>", lambda event, f=frame: self.hover_off(f))
 
     def draw_right(self):
         self.right = tk.Frame(self.master)
