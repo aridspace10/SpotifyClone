@@ -170,10 +170,19 @@ class HomeView(tk.Frame):
         self.draw_right()
         self.draw_bottom()
     
-    def hover_on(self, frame: tk.Frame) -> None:
-        frame.config(bg = "lightgray")
-    def hover_off(self, frame: tk.Frame) -> None:
-        frame.config(bg = "#202020")
+    def hover_on(self, widget: tk.Widget) -> None:
+        widget.config(bg = "lightgray")
+        if type(widget) == tk.Frame:
+            widgets = widget.winfo_children()
+            for widget in widgets:
+                self.hover_on(widget)
+
+    def hover_off(self, widget: tk.Widget) -> None:
+        widget.config(bg = "#202020")
+        if type(widget) == tk.Frame:
+            widgets = widget.winfo_children()
+            for widget in widgets:
+                self.hover_off(widget)
 
 class View():
     def __init__(self, master, user, model):
