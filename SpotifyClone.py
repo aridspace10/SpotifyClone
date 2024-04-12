@@ -74,7 +74,13 @@ class HomeView(tk.Frame):
         self.master = master
         self.user = user
         self.model = model
+        self.cur_playlist = 1
         self.pack()
+    
+    def select_playlist(self, playlistid: int) -> None:
+        self.cur_playlist = playlistid
+        self.middle.destroy()
+        self.draw_middle()
     
     def draw_navbar(self):
         self.navbar = tk.Frame(self.master, bg = "black")
@@ -109,6 +115,9 @@ class HomeView(tk.Frame):
             frame.bind("<Enter>", lambda event, f=frame: self.hover_on(f))
             frame.bind("<Leave>", lambda event, f=frame: self.hover_off(f))
 
+            frame.bind("<Button-1>", lambda event, p=playlist[0]: self.select_playlist(p))
+            title.bind("<Button-1>", lambda event, p=playlist[0]: self.select_playlist(p))
+
     def draw_middle(self):
         self.middle = tk.Frame(self.master, bg = "#202020")
         self.middle.pack(side = tk.LEFT, ipadx = 5, ipady=5, fill = tk.BOTH, expand = tk.TRUE)
@@ -135,7 +144,7 @@ class HomeView(tk.Frame):
         self.songs_frame = tk.Frame(self.middle, bg = "#202020")
         self.songs_frame.pack(side = tk.TOP)
 
-        songs = self.model.get_songs_in_playlist(1)
+        songs = self.model.get_songs_in_playlist(self.cur_playlist)
         for song in enumerate(songs):
             frame = tk.Frame(self.songs_frame, bg = "#202020")
             frame.pack(side = tk.TOP, fill= tk.X, expand = tk.TRUE)
