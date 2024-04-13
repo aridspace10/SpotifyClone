@@ -75,12 +75,8 @@ class HomeView(tk.Frame):
         self.user = user
         self.model = model
         self.cur_playlist = 1
+        self.middle_sec = "P"
         self.pack()
-    
-    def select_playlist(self, playlistid: int) -> None:
-        self.cur_playlist = playlistid
-        self.middle.destroy()
-        self.draw_middle()
     
     def draw_navbar(self):
         self.navbar = tk.Frame(self.master, bg = "black")
@@ -94,6 +90,9 @@ class HomeView(tk.Frame):
 
         self.search_button = tk.Button(self.navigation, text = "Search" , bg = "#202020", borderwidth=0, command = lambda: self.master.switch_page(None))
         self.search_button.pack(side = tk.TOP, padx= 5, pady= 5)
+
+        self.home_button.bind("<Button-1>", lambda event, s = "Home": self.change_middle(s))
+        self.search_button.bind("<Button-1>", lambda event, s = "Search": self.change_middle(s))
 
         self.playlists_frame = tk.Frame(self.navbar, bg = "#202020")
         self.playlists_frame.pack(side = tk.TOP)
@@ -115,10 +114,19 @@ class HomeView(tk.Frame):
             frame.bind("<Enter>", lambda event, f=frame: self.hover_on(f))
             frame.bind("<Leave>", lambda event, f=frame: self.hover_off(f))
 
-            frame.bind("<Button-1>", lambda event, p=playlist[0]: self.select_playlist(p))
-            title.bind("<Button-1>", lambda event, p=playlist[0]: self.select_playlist(p))
+            frame.bind("<Button-1>", lambda event, p=playlist[0]: self.change_middle(p))
+            title.bind("<Button-1>", lambda event, p=playlist[0]: self.change_middle(p))
 
-    def draw_middle(self):
+    def change_middle(self, section) -> None:
+        if (type(section) == int):
+            self.middle_sec = "P"
+            self.cur_playlist = section
+        else:
+            self.middle_sec = section
+        self.middle.destroy()
+        self.draw_middle()
+
+    def draw_playlist(self):
         self.middle = tk.Frame(self.master, bg = "#202020")
         self.middle.pack(side = tk.LEFT, ipadx = 5, ipady=5, fill = tk.BOTH, expand = tk.TRUE)
 
@@ -165,6 +173,9 @@ class HomeView(tk.Frame):
             frame.bind("<Enter>", lambda event, f=frame: self.hover_on(f))
             frame.bind("<Leave>", lambda event, f=frame: self.hover_off(f))
 
+    def draw_middle(self):
+        if self.middle_sec == "P":
+            self.draw_playlist()
     def draw_right(self):
         self.right = tk.Frame(self.master)
         self.right.pack(side = tk.LEFT)
