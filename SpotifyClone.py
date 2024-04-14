@@ -85,7 +85,7 @@ class HomeView(tk.Frame):
         self.navigation = tk.Frame(self.navbar, bg = "#202020")
         self.navigation.pack(side = tk.TOP, padx = 5, pady= 5)
 
-        self.home_button = tk.Button(self.navigation, text = "Home", bg = "#202020", borderwidth=0, command = lambda: self.master.switch_page(HomeView))
+        self.home_button = tk.Button(self.navigation, text = "Home", bg = "#202020", borderwidth=0, command = lambda: self.change_middle('H'))
         self.home_button.pack(side = tk.TOP, padx= 5, pady= 5)
 
         self.search_button = tk.Button(self.navigation, text = "Search" , bg = "#202020", borderwidth=0, command = lambda: self.master.switch_page(None))
@@ -127,28 +127,6 @@ class HomeView(tk.Frame):
         self.draw_middle()
 
     def draw_playlist(self):
-        self.middle = tk.Frame(self.master, bg = "#202020")
-        self.middle.pack(side = tk.LEFT, ipadx = 5, ipady=5, fill = tk.BOTH, expand = tk.TRUE)
-
-        self.header = tk.Frame(self.middle)
-        self.header.pack(side = tk.TOP)
-
-        if not len(self.user.history):
-            backfg = "grey"
-        else:
-            backfg = "white"
-
-        if not len(self.user.future):
-            fowardfg = "grey"
-        else:
-            fowardfg = "white"
-
-        self.back_btn = tk.Button(self.header, text = "<", fg = backfg, command = lambda: self.master.switch_page(None))
-        self.back_btn.pack(side = tk.LEFT)
-
-        self.forward_btn = tk.Button(self.header, text = ">", fg = fowardfg, command = lambda: self.master.switch_page(None))
-        self.forward_btn.pack(side = tk.LEFT)
-
         self.songs_frame = tk.Frame(self.middle, bg = "#202020")
         self.songs_frame.pack(side = tk.TOP)
 
@@ -173,9 +151,43 @@ class HomeView(tk.Frame):
             frame.bind("<Enter>", lambda event, f=frame: self.hover_on(f))
             frame.bind("<Leave>", lambda event, f=frame: self.hover_off(f))
 
+    def draw_home(self) -> None:
+        self.type_frame = tk.Frame(self.middle)
+        self.type_frame.pack(side = tk.TOP)
+
+        tk.Button(self.type_frame, text = "All", command = None).pack(side = tk.LEFT)
+        tk.Button(self.type_frame, text = "Music", command = None).pack(side = tk.LEFT)
+        tk.Button(self.type_frame, text = "Podcasts", command = None).pack(side = tk.LEFT)
+        tk.Button(self.type_frame, text = "Audiobooks", command = None).pack(side = tk.LEFT)
+        
     def draw_middle(self):
+        self.middle = tk.Frame(self.master, bg = "#202020")
+        self.middle.pack(side = tk.LEFT, ipadx = 5, ipady=5, fill = tk.BOTH, expand = tk.TRUE)
+
+        self.header = tk.Frame(self.middle)
+        self.header.pack(side = tk.TOP)
+
+        if not len(self.user.history):
+            backfg = "grey"
+        else:
+            backfg = "white"
+
+        if not len(self.user.future):
+            fowardfg = "grey"
+        else:
+            fowardfg = "white"
+
+        self.back_btn = tk.Button(self.header, text = "<", fg = backfg, command = lambda: self.master.switch_page(None))
+        self.back_btn.pack(side = tk.LEFT)
+
+        self.forward_btn = tk.Button(self.header, text = ">", fg = fowardfg, command = lambda: self.master.switch_page(None))
+        self.forward_btn.pack(side = tk.LEFT)
+
         if self.middle_sec == "P":
             self.draw_playlist()
+        elif self.middle_sec == "H":
+            self.draw_home()
+        
     def draw_right(self):
         self.right = tk.Frame(self.master)
         self.right.pack(side = tk.LEFT)
